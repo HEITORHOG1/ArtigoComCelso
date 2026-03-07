@@ -1,0 +1,91 @@
+\documentclass{ieeeaccess}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{bm}
+\makeatletter
+\AtBeginDocument{\DeclareMathVersion{bold}
+\SetSymbolFont{operators}{bold}{T1}{times}{b}{n}
+\SetSymbolFont{NewLetters}{bold}{T1}{times}{b}{it}
+\SetMathAlphabet{\mathrm}{bold}{T1}{times}{b}{n}
+\SetMathAlphabet{\mathit}{bold}{T1}{times}{b}{it}
+\SetMathAlphabet{\mathbf}{bold}{T1}{times}{b}{n}
+\SetMathAlphabet{\mathtt}{bold}{OT1}{pcr}{b}{n}
+\SetSymbolFont{symbols}{bold}{OMS}{cmsy}{b}{n}
+\renewcommand\boldmath{\@nomath\boldmath\mathversion{bold}}}
+\makeatother
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Caminho das figuras
+\graphicspath{{figuras/}}
+
+\begin{document}
+\history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
+\doi{10.1109/ACCESS.2026.XXXXXXX}
+
+\title{Automated Risk Priority Number Estimation for CubeSat FMEA Using XGBoost and SHAP Explainability}
+
+\author{\uppercase{Heitor Oliveira Gon\c{c}alves}\authorrefmark{1},
+\uppercase{TODO: Celso Sobrenome}\authorrefmark{2}}
+
+\address[1]{TODO: Department, University/Institution, City, Country
+(e-mail: TODO)}
+\address[2]{TODO: Department, University/Institution, City, Country
+(e-mail: TODO)}
+
+\tfootnote{TODO: Support/funding acknowledgment, e.g., ``This work was
+supported in part by ...''}
+
+\markboth
+{Gon\c{c}alves \headeretal: Automated RPN Estimation for CubeSat FMEA}
+{Gon\c{c}alves \headeretal: Automated RPN Estimation for CubeSat FMEA}
+
+\corresp{Corresponding author: Heitor Oliveira Gon\c{c}alves (e-mail: TODO).}
+
+\begin{abstract}
+\input{secoes/00_abstract}
+\end{abstract}
+
+\begin{keywords}
+CubeSat, explainable AI, FMEA, machine learning, risk priority number, SHAP, space systems reliability, XGBoost.
+\end{keywords}
+
+\titlepgskip=-21pt
+
+\maketitle
+
+%% --- BODY ---
+\input{secoes/01_introduction}
+\input{secoes/02_related_work}
+\input{secoes/03_methodology}
+\input{secoes/04_results}
+\input{secoes/05_conclusion}
+
+%% --- ACKNOWLEDGMENT ---
+\section*{Acknowledgment}
+% TODO: Agradecimentos
+
+%% --- REFERENCES ---
+\bibliographystyle{IEEEtran}
+\bibliography{referencias}
+
+%% --- BIOGRAPHIES ---
+\begin{IEEEbiographynophoto}{Heitor Oliveira Gon\c{c}alves}
+TODO: Biografia do autor 1.
+\end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{TODO: Celso Sobrenome}
+TODO: Biografia do autor 2.
+\end{IEEEbiographynophoto}
+
+\EOD
+
+\end{document}

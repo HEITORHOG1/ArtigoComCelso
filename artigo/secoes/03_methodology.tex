@@ -1,0 +1,32 @@
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Proposed Framework Overview}
+\label{subsec:framework_overview}
+% TODO: 4 stages: dataset -> XGBoost -> SHAP -> clustering
+% \Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){fig_framework.png}
+% {\textbf{Proposed XAI framework for automated RPN estimation.}\label{fig:framework}}
+
+\subsection{Dataset Construction}
+\label{subsec:dataset}
+% TODO: 63 failure modes (AESP-14, FloripaSat) + 18 literature studies
+% Features: S(1-10), O(1-10), D(1-10), subsystem, mission phase, component type
+% Target: RPN = S x O x D
+% Table I: Dataset summary
+
+\subsection{XGBoost Model and Validation Protocol}
+\label{subsec:xgboost}
+% TODO: GridSearchCV, k=5 stratified CV
+% Metrics: R^2, RMSE, MAPE
+% Baselines: linear regression, Random Forest
+
+\subsection{SHAP Explainability Analysis}
+\label{subsec:shap}
+% TODO: SHAP Summary Plot (global feature importance)
+% SHAP Dependence Plot (Severity x SHAP value, colored by subsystem)
+% Per-subsystem analysis
+
+\subsection{Hierarchical Clustering}
+\label{subsec:clustering}
+% TODO: Ward linkage, normalized [S, O, D, RPN]
+% 3 clusters via dendrogram + elbow method
