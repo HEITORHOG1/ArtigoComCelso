@@ -7,6 +7,7 @@
 \usepackage{booktabs}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{url}
 
 \usepackage{bm}
 \makeatletter
@@ -27,6 +28,9 @@
 % Caminho das figuras
 \graphicspath{{figuras/}}
 
+\vol{14}
+\renewcommand{\theyear}{2026}
+
 \begin{document}
 \history{Date of publication xxxx 00, 0000, date of current version xxxx 00, 0000.}
 \doi{10.1109/ACCESS.2026.XXXXXXX}
@@ -34,21 +38,19 @@
 \title{Automated Risk Priority Number Estimation for CubeSat FMEA Using XGBoost and SHAP Explainability}
 
 \author{\uppercase{Heitor Oliveira Gon\c{c}alves}\authorrefmark{1},
-\uppercase{TODO: Celso Sobrenome}\authorrefmark{2}}
+\uppercase{Celso Pereira}\authorrefmark{1},
+\uppercase{Jos\'{e} Cristiano Pereira}\authorrefmark{1}}
 
-\address[1]{TODO: Department, University/Institution, City, Country
-(e-mail: TODO)}
-\address[2]{TODO: Department, University/Institution, City, Country
-(e-mail: TODO)}
+\address[1]{Center for Engineering and Computing, Catholic University of Petr\'{o}polis, Petr\'{o}polis, RJ, Brazil
+(e-mail: heitorhog@gmail.com, cpereira.eng@gmail.com, josecristiano.pereira@ucp.br)}
 
-\tfootnote{TODO: Support/funding acknowledgment, e.g., ``This work was
-supported in part by ...''}
+\tfootnote{This work did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.}
 
 \markboth
 {Gon\c{c}alves \headeretal: Automated RPN Estimation for CubeSat FMEA}
 {Gon\c{c}alves \headeretal: Automated RPN Estimation for CubeSat FMEA}
 
-\corresp{Corresponding author: Heitor Oliveira Gon\c{c}alves (e-mail: TODO).}
+\corresp{Corresponding author: Heitor Oliveira Gon\c{c}alves (e-mail: heitorhog@gmail.com).}
 
 \begin{abstract}
 \input{secoes/00_abstract}
@@ -71,7 +73,15 @@ CubeSat, explainable AI, FMEA, machine learning, risk priority number, SHAP, spa
 
 %% --- ACKNOWLEDGMENT ---
 \section*{Acknowledgment}
-% TODO: Agradecimentos
+The authors would like to thank the Center for Engineering and Computing at the Catholic University of Petr\'{o}polis for providing the institutional support for this research.
+
+%% --- DATA AVAILABILITY ---
+\section*{Data Availability Statement}
+The dataset and source code used in this study are publicly available at \url{https://github.com/HEITORHOG1/cubesat-fmea-xai} to support reproducibility.
+
+%% --- CONFLICT OF INTEREST ---
+\section*{Conflict of Interest}
+The authors declare no conflict of interest.
 
 %% --- REFERENCES ---
 \bibliographystyle{IEEEtran}
@@ -79,11 +89,15 @@ CubeSat, explainable AI, FMEA, machine learning, risk priority number, SHAP, spa
 
 %% --- BIOGRAPHIES ---
 \begin{IEEEbiographynophoto}{Heitor Oliveira Gon\c{c}alves}
-TODO: Biografia do autor 1.
+received the B.Sc.\ degree in computer science from the Catholic University of Petr\'{o}polis (UCP), Petr\'{o}polis, Brazil. He is currently pursuing research in artificial intelligence applied to aerospace systems reliability at the Center for Engineering and Computing, UCP. His research interests include machine learning, explainable AI, and their applications to risk analysis in space missions.
 \end{IEEEbiographynophoto}
 
-\begin{IEEEbiographynophoto}{TODO: Celso Sobrenome}
-TODO: Biografia do autor 2.
+\begin{IEEEbiographynophoto}{Celso Pereira}
+is a researcher and engineer at the Center for Engineering and Computing, Catholic University of Petr\'{o}polis (UCP), Petr\'{o}polis, Brazil. His research interests include systems engineering, reliability analysis, and computational methods applied to aerospace systems.
+\end{IEEEbiographynophoto}
+
+\begin{IEEEbiographynophoto}{Jos\'{e} Cristiano Pereira}
+is a professor at the Center for Engineering and Computing, Catholic University of Petr\'{o}polis (UCP), Petr\'{o}polis, Brazil. His research interests include computational intelligence, optimization, and engineering applications of machine learning. He has supervised several graduate and undergraduate projects in the fields of AI and systems engineering.
 \end{IEEEbiographynophoto}
 
 \EOD

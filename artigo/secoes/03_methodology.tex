@@ -1,32 +1,106 @@
 \section{Methodology}
 \label{sec:methodology}
 
+This section describes the proposed framework for automated RPN estimation in CubeSat FMEA. The framework comprises four sequential stages: (1)~dataset construction, (2)~XGBoost model training, (3)~SHAP explainability analysis, and (4)~hierarchical clustering for risk group classification. Fig.~\ref{fig:framework} provides an overview of the pipeline.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){figuras/fig1_framework.pdf}
+{\textbf{Overview of the proposed XAI framework for automated RPN estimation in CubeSat FMEA.} The pipeline consists of four sequential stages: data collection, XGBoost model training, SHAP explainability analysis, and hierarchical clustering for risk group classification.\label{fig:framework}}
+
 \subsection{Proposed Framework Overview}
 \label{subsec:framework_overview}
-% TODO: 4 stages: dataset -> XGBoost -> SHAP -> clustering
-% \Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){fig_framework.png}
-% {\textbf{Proposed XAI framework for automated RPN estimation.}\label{fig:framework}}
+
+The proposed framework follows a four-stage pipeline designed to transform raw failure mode data into actionable, interpretable risk assessments:
+
+\begin{enumerate}
+\item \textbf{Data Collection and Structuring:} Failure modes are compiled from CubeSat subsystem analyses and the specialized literature, with Severity~(S), Occurrence~(O), and Detection~(D) indices assigned according to standardized criteria adapted for the CubeSat domain.
+\item \textbf{XGBoost Model Training:} A gradient boosting regression model is trained to predict the Risk Priority Number from the input features, with hyperparameter optimization via grid search and cross-validation.
+\item \textbf{SHAP Explainability Analysis:} SHapley Additive Explanations values are computed for each prediction, enabling the identification of dominant risk drivers at both the global and per-subsystem levels.
+\item \textbf{Hierarchical Clustering:} An agglomerative clustering algorithm groups failure modes into distinct risk classes, providing structured support for corrective action prioritization.
+\end{enumerate}
 
 \subsection{Dataset Construction}
 \label{subsec:dataset}
-% TODO: 63 failure modes (AESP-14, FloripaSat) + 18 literature studies
-% Features: S(1-10), O(1-10), D(1-10), subsystem, mission phase, component type
-% Target: RPN = S x O x D
-% Table I: Dataset summary
+
+No publicly available FMEA dataset exists for CubeSat missions. Therefore, a structured dataset was constructed specifically for this study, following a rigorous and reproducible methodology. The dataset comprises 80~failure modes distributed across six CubeSat subsystems: Electrical Power System (EPS, $n=16$), Communication (COM, $n=14$), Attitude Determination and Control System (ADCS, $n=14$), On-Board Computer (OBC, $n=13$), Structure and Deployment (Structure, $n=13$), and Thermal Control (Thermal, $n=10$).
+
+Each failure mode was characterized by the following input variables:
+\begin{itemize}
+\item \textbf{Severity (S):} Impact of the failure on the mission, assessed on a 1--10 scale adapted from ECSS-Q-ST-30-02C severity categories~\cite{bouwmeester2022improving}. Values range from 1 (no perceivable effect) to 10 (catastrophic loss with safety risk or debris generation).
+\item \textbf{Occurrence (O):} Estimated probability of the failure mode occurring during the mission lifetime, assessed on a 1--10 scale calibrated with the statistical failure data reported by Villela et al.~\cite{villela2019towards}. For instance, $O=9$ corresponds to failure rates observed in 20--30\% of inaugural CubeSat missions.
+\item \textbf{Detection (D):} Ability to detect the failure or its cause before mission impact, assessed on a 1--10 scale adapted from the AIAG FMEA detection scale for the orbital context. A score of $D=1$ indicates detection through automated ground testing, while $D=10$ indicates an absolutely undetectable failure mode.
+\item \textbf{Subsystem:} Categorical variable indicating the subsystem (EPS, COM, ADCS, OBC, Structure, Thermal).
+\item \textbf{Mission Phase:} Phase in which the failure can occur (integration, launch, or operation).
+\item \textbf{Component Type:} Whether the component is commercial off-the-shelf (COTS, $n=72$) or space-grade qualified ($n=8$).
+\end{itemize}
+
+The target variable is the Risk Priority Number, calculated as $\text{RPN} = S \times O \times D$. The resulting dataset spans RPN values from 60 to 560, with 5~high-risk entries ($\text{RPN} > 400$), 41~intermediate-risk entries ($200 \leq \text{RPN} \leq 400$), and 34~low-risk entries ($\text{RPN} < 200$).
+
+Table~\ref{tab:dataset_summary} summarizes the dataset composition by subsystem.
+
+\begin{table}[h]
+\caption{\textbf{Dataset summary by CubeSat subsystem.}}
+\label{tab:dataset_summary}
+\centering
+\begin{tabular}{lccccc}
+\hline
+\textbf{Subsystem} & \textbf{Count} & \textbf{RPN Range} & \textbf{Mean S} & \textbf{Mean O} & \textbf{Mean D} \\
+\hline
+EPS        & 16 & 60--560  & 8.3 & 4.8 & 6.4 \\
+COM        & 14 & 80--480  & 7.6 & 5.6 & 6.4 \\
+ADCS       & 14 & 72--480  & 6.9 & 5.0 & 6.4 \\
+OBC        & 13 & 80--504  & 7.3 & 5.1 & 5.7 \\
+Structure  & 13 & 60--400  & 8.7 & 3.8 & 5.1 \\
+Thermal    & 10 & 72--336  & 6.4 & 4.7 & 6.3 \\
+\hline
+\textbf{Total} & \textbf{80} & \textbf{60--560} & \textbf{7.6} & \textbf{4.8} & \textbf{6.0} \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{XGBoost Model and Validation Protocol}
 \label{subsec:xgboost}
-% TODO: GridSearchCV, k=5 stratified CV
-% Metrics: R^2, RMSE, MAPE
-% Baselines: linear regression, Random Forest
+
+XGBoost (eXtreme Gradient Boosting) was selected as the primary regression algorithm for its demonstrated superior performance on small-to-medium tabular datasets, its robustness to outliers, and its native compatibility with SHAP explainability techniques. The model was configured with the \texttt{reg:squarederror} objective function for regression.
+
+\subsubsection{Feature Engineering}
+The categorical variables (subsystem, mission phase, and component type) were encoded using label encoding. The feature vector for each failure mode thus consists of six dimensions: $\mathbf{x} = [S, O, D, \text{subsystem}_\text{enc}, \text{phase}_\text{enc}, \text{type}_\text{enc}]$. No interaction features were included, as the goal was to evaluate the model's ability to learn the underlying risk structure directly from the primary FMEA indices, preserving interpretability of the SHAP analysis.
+
+\subsubsection{Hyperparameter Optimization}
+The hyperparameters were optimized via exhaustive grid search (GridSearchCV) with $k=5$-fold cross-validation. The search space included: number of estimators $\in \{100, 200, 300\}$, maximum tree depth $\in \{3, 5, 7\}$, learning rate $\in \{0.05, 0.1, 0.2\}$, subsample ratio $\in \{0.8, 1.0\}$, and column sample by tree $\in \{0.8, 1.0\}$, totaling 108 parameter combinations.
+
+\subsubsection{Training and Evaluation}
+The dataset was split into training (80\%, $n=64$) and test (20\%, $n=16$) sets using random sampling with a fixed random seed for reproducibility. Three evaluation metrics were adopted:
+\begin{itemize}
+\item \textbf{Coefficient of determination ($R^2$):} Measures the proportion of variance in the RPN explained by the model.
+\item \textbf{Root Mean Squared Error (RMSE):} Measures the average magnitude of prediction errors in the same units as RPN.
+\item \textbf{Mean Absolute Percentage Error (MAPE):} Measures the relative prediction error as a percentage, facilitating interpretation across different RPN scales.
+\end{itemize}
+
+\subsubsection{Baseline Models}
+Two baseline models were trained for comparative evaluation:
+\begin{itemize}
+\item \textbf{Linear Regression:} Serves as a simple baseline to assess whether the relationship between features and RPN can be captured by a linear model.
+\item \textbf{Random Forest:} An ensemble tree-based method that provides a nonlinear baseline without the sequential boosting strategy of XGBoost. It was configured with 200 estimators and a maximum depth of~7.
+\end{itemize}
 
 \subsection{SHAP Explainability Analysis}
 \label{subsec:shap}
-% TODO: SHAP Summary Plot (global feature importance)
-% SHAP Dependence Plot (Severity x SHAP value, colored by subsystem)
-% Per-subsystem analysis
+
+To ensure model interpretability---an indispensable requirement for adoption in safety-critical systems---SHapley Additive Explanations (SHAP) values were computed for the trained XGBoost model using the TreeExplainer algorithm, which provides exact Shapley values for tree-based models in polynomial time.
+
+The SHAP analysis was conducted at two levels of granularity:
+\begin{enumerate}
+\item \textbf{Global level:} A SHAP Summary Plot was generated to visualize the overall importance and directional effect of each feature on the predicted RPN across all 80~failure modes.
+\item \textbf{Per-subsystem level:} The mean absolute SHAP values for the three primary risk indices (S, O, D) were computed separately for each subsystem, enabling the identification of the dominant risk driver within each engineering domain. This per-subsystem decomposition provides actionable insights for targeted corrective action design.
+\end{enumerate}
+
+Additionally, a SHAP Dependence Plot was generated for the Severity feature, with color coding by subsystem, to visualize interaction effects between Severity and the subsystem context on the predicted RPN.
 
 \subsection{Hierarchical Clustering}
 \label{subsec:clustering}
-% TODO: Ward linkage, normalized [S, O, D, RPN]
-% 3 clusters via dendrogram + elbow method
+
+To complement the predictive and explanatory components of the framework, a hierarchical agglomerative clustering analysis was performed to group the 80~failure modes into distinct risk classes. The clustering was applied to the feature vector $[S, O, D, \text{RPN}]$, normalized using standard scaling (zero mean, unit variance) to ensure equal contribution of each dimension.
+
+The Ward linkage criterion was adopted, which minimizes the total within-cluster variance at each merge step. The number of clusters was determined by visual inspection of the dendrogram combined with domain knowledge: three clusters were selected to correspond to the standard FMEA risk stratification (high, intermediate, and low risk).
+
+The resulting cluster profiles were characterized by their mean RPN, RPN range, mean values of S, O, and D, and the distribution of subsystems within each cluster. This stratification provides a structured basis for prioritizing corrective actions and allocating engineering resources according to the risk level of each failure mode group.

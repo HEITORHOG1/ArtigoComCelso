@@ -1,11 +1,22 @@
 \section{Introduction}
 \label{sec:introduction}
-\PARstart{T}{ODO:} Escrever Introduction.
-% Topicos planejados:
-% - Taxas de falha em CubeSats (25-30\% nas missoes inaugurais)
-% - FMEA como ferramenta padrao (ECSS-Q-ST-30C, NASA)
-% - Limitacao: subjetividade na atribuicao de S, O, D -> RPN
-% - ML (XGBoost) + XAI (SHAP) como solucao
-% - Lacuna: inexistente para CubeSats brasileiros
-% - 5 contribuicoes do artigo
-% - Estrutura do restante do artigo
+\PARstart{T}{he} reliability of nanosatellite missions has received increasing attention from the international scientific community, driven by both the rapid growth of the small satellite sector and the persistent failure rates that still compromise the majority of inaugural missions developed by academic institutions. It is estimated that between 25\% and 30\% of CubeSats launched on their first mission fail to achieve their primary operational objectives~\cite{villela2019towards}, and a significant portion of these failures originate from failure modes that could have been identified and mitigated during the design phase through systematic risk analysis methods.
+
+In this context, Failure Mode and Effects Analysis (FMEA) remains the primary preventive reliability analysis tool in aerospace systems, widely adopted in the European Space Agency standard ECSS-Q-ST-30C and by NASA. Its operational logic consists of systematically identifying the modes by which each component can fail, evaluating the effects of these failures on the mission, and prioritizing corrective actions based on the Risk Priority Number (RPN)---calculated as the product of three expert-assigned indices: Severity~(S), Occurrence~(O), and Detection~(D).
+
+However, precisely at this point lies its main limitation. The assignment of S, O, and D indices depends on the subjective judgment of analysts, which makes the results sensitive to the individual experience of the assessors, hinders comparison between analyses performed by different teams, and reduces the reproducibility of the process~\cite{amwrpn2018,geomean_fmea2019,liu2016fmea_uncertainty}---an increasingly critical requirement in scientific research environments.
+
+Recent advances in machine learning have opened promising avenues for overcoming these limitations. Models based on gradient boosting, such as XGBoost, have demonstrated the ability to capture nonlinear relationships between risk variables in analogous industrial contexts~\cite{alrefaie2020enhancing}. When combined with Explainable Artificial Intelligence (XAI) techniques, such as SHapley Additive Explanations (SHAP), these models become not only accurate but also interpretable---an indispensable requirement for adoption in safety-critical systems, where decisions must be justified and auditable~\cite{xai_xgboost_shap2025,chen2024interpretable}.
+
+The application of these approaches to the space domain, especially in CubeSat missions developed in emerging countries, remains largely unexplored. Works that combine historical mission data with modern XAI techniques for FMEA automation are practically nonexistent in the literature for nanosatellites~\cite{aadfmea2023}, constituting a relevant scientific gap that the present work aims to fill.
+
+The contributions of this article are as follows:
+\begin{enumerate}
+\item A complete and reproducible XAI framework for RPN automation in CubeSat FMEA;
+\item Construction of a structured dataset with 80~failure modes across six CubeSat subsystems, compiled from the literature and expert assessment;
+\item SHAP analysis that identifies the dominant risk drivers per subsystem, providing model interpretability;
+\item Hierarchical clustering of failure modes into three risk classes for corrective action prioritization;
+\item Quantitative comparison between the proposed framework and conventional expert-based assessment using baseline models.
+\end{enumerate}
+
+The remainder of this article is organized as follows: Section~\ref{sec:related_work} presents the state-of-the-art review; Section~\ref{sec:methodology} describes the proposed methodology; Section~\ref{sec:results} discusses the results; and Section~\ref{sec:conclusion} concludes with implications and future research directions.

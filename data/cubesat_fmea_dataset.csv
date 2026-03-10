@@ -1,0 +1,81 @@
+id,subsystem,component,failure_mode,failure_effect,S,O,D,RPN,mission_phase,component_type,source
+1,EPS,Solar Panel,Cell cracking due to thermal cycling,Reduced power generation capacity,7,6,5,210,operation,COTS,Bouwmeester2022
+2,EPS,Solar Panel,Delamination of cover glass,Progressive power degradation,6,5,6,180,operation,COTS,Villela2019
+3,EPS,Solar Panel,String interconnect fracture,Loss of one string output,7,5,7,245,operation,COTS,literature
+4,EPS,Battery,Capacity fade due to radiation,Reduced mission lifetime,8,7,6,336,operation,COTS,Bouwmeester2022
+5,EPS,Battery,Overcharge due to BMS failure,Thermal runaway risk and total EPS loss,10,4,4,160,operation,COTS,literature
+6,EPS,Battery,Deep discharge below safe threshold,Permanent cell damage and mission loss,9,5,5,225,operation,COTS,literature
+7,EPS,Battery,Internal short circuit,Catastrophic failure and potential fire,10,3,8,240,operation,COTS,literature
+8,EPS,Power Regulator,Output voltage drift,Subsystem brownout or reset,7,5,4,140,operation,COTS,literature
+9,EPS,Power Regulator,Overcurrent latchup from SEL,Permanent regulator damage,9,4,7,252,operation,COTS,literature
+10,EPS,Power Bus,Bus short circuit,Total power loss to all subsystems,10,3,6,180,integration,COTS,literature
+11,EPS,MPPT Controller,Tracking algorithm failure,Suboptimal power harvesting,5,5,5,125,operation,COTS,literature
+12,COM,Transceiver,RF power amplifier degradation,Reduced downlink margin and data loss,7,6,6,252,operation,COTS,Villela2019
+13,COM,Transceiver,Frequency drift due to temperature,Intermittent link loss,6,7,7,294,operation,COTS,literature
+14,COM,Transceiver,Receiver desensitization,Failure to receive ground commands,8,5,7,280,operation,COTS,literature
+15,COM,Antenna,Deployment mechanism jamming,Total communication loss,10,8,3,240,launch,COTS,AESP14
+16,COM,Antenna,Impedance mismatch after deployment,Reduced link budget and partial comm loss,6,6,8,288,operation,COTS,literature
+17,COM,Antenna,Tip mass detachment,Altered radiation pattern and degraded link,7,4,8,224,operation,COTS,literature
+18,COM,RF Cable,Connector loosening from vibration,Intermittent signal loss,7,5,6,210,launch,COTS,literature
+19,COM,Protocol Stack,Packet corruption in uplink,Failed command execution,6,6,5,180,operation,COTS,literature
+20,COM,Ground Station,Tracking error or scheduling conflict,Missed communication pass,5,7,3,105,operation,COTS,literature
+21,COM,Transceiver,Single Event Upset in transceiver IC,Transient communication interruption,6,6,7,252,operation,COTS,literature
+22,ADCS,Magnetorquer,Coil open circuit,Loss of attitude control in one axis,8,5,5,200,operation,COTS,literature
+23,ADCS,Magnetorquer,Residual magnetic dipole,Persistent attitude bias,5,6,7,210,operation,COTS,literature
+24,ADCS,Sun Sensor,Sensor degradation from radiation,Increasing attitude determination error,6,6,6,216,operation,COTS,Bouwmeester2022
+25,ADCS,Sun Sensor,FOV obstruction from debris or outgassing,Intermittent incorrect sun vector,5,4,7,140,operation,COTS,literature
+26,ADCS,Magnetometer,Calibration drift in orbit,Growing attitude estimation error,5,7,6,210,operation,COTS,literature
+27,ADCS,Magnetometer,EMI from other subsystems,Noisy measurements and control jitter,4,7,5,140,operation,COTS,literature
+28,ADCS,Control Algorithm,Numerical divergence in Kalman filter,Attitude estimation failure,8,4,6,192,operation,COTS,literature
+29,ADCS,Control Algorithm,Incorrect mode transition logic,Uncontrolled tumbling,9,3,6,162,operation,COTS,literature
+30,ADCS,Reaction Wheel,Bearing wear and friction increase,Reduced pointing accuracy over time,7,5,6,210,operation,space-grade,literature
+31,ADCS,Gyroscope,Bias drift exceeding calibration range,Degraded attitude rate estimation,6,5,6,180,operation,COTS,literature
+32,OBC,Microcontroller,SEU in RAM or registers,Software crash or incorrect computation,7,7,5,245,operation,COTS,literature
+33,OBC,Microcontroller,Latchup from heavy ion strike,Permanent MCU damage requiring power cycle,9,4,6,216,operation,COTS,literature
+34,OBC,Flash Memory,Bit flip accumulation in flash,Data corruption in stored images or logs,6,7,6,252,operation,COTS,literature
+35,OBC,Flash Memory,Wear-out of flash write cycles,Inability to store new data,5,4,4,80,operation,COTS,literature
+36,OBC,Watchdog Timer,Watchdog fails to trigger reset,System hangs without recovery,9,3,8,216,operation,COTS,literature
+37,OBC,Software,Unhandled exception in flight software,Subsystem enters safe mode unexpectedly,7,5,4,140,operation,COTS,literature
+38,OBC,Software,Memory leak in long-running process,Progressive performance degradation,6,6,6,216,operation,COTS,literature
+39,OBC,I2C Bus,Bus lockup from slave device hang,Loss of communication with subsystem,8,6,5,240,operation,COTS,Albalooshi2023
+40,OBC,I2C Bus,Clock stretching timeout,Intermittent data transfer failure,5,7,6,210,operation,COTS,Albalooshi2023
+41,Structure,Deployment Mechanism,Burn wire fails to activate,Solar panel or antenna stuck,10,5,3,150,launch,COTS,AESP14
+42,Structure,Deployment Mechanism,Spring mechanism fatigue,Incomplete deployment,9,4,4,144,launch,COTS,literature
+43,Structure,Deployment Mechanism,Hold-down release asymmetry,Structural shock to internal components,7,4,5,140,launch,COTS,literature
+44,Structure,Primary Structure,Fastener loosening from vibration,Structural integrity compromise,8,4,4,128,launch,COTS,literature
+45,Structure,Primary Structure,Stress fracture at mounting point,Component detachment risk,9,3,5,135,launch,COTS,literature
+46,Structure,PCB Mounting,Solder joint fatigue from thermal cycling,Intermittent electrical connection,7,6,7,294,operation,COTS,literature
+47,Structure,PCB Mounting,Conformal coating delamination,Exposure to contamination or arcing,5,5,8,200,operation,COTS,literature
+48,Structure,Rail Guide,Dimensional tolerance exceedance,Jamming in P-POD deployer,10,3,2,60,launch,COTS,literature
+49,Structure,Kill Switch,Kill switch fails to deactivate,Premature operation before deployment,8,3,3,72,launch,COTS,literature
+50,Structure,Separation System,Insufficient separation velocity,Collision risk with launch vehicle,10,2,4,80,launch,COTS,literature
+51,Thermal,Passive Coating,Surface coating degradation from UV,Altered thermal balance,5,6,7,210,operation,COTS,literature
+52,Thermal,Passive Coating,Alpha/epsilon ratio shift,Gradual temperature drift,4,6,8,192,operation,COTS,literature
+53,Thermal,MLI Blanket,MLI detachment or tearing,Localized hot spot on exposed surface,6,3,7,126,operation,COTS,literature
+54,Thermal,Heat Sink,Thermal interface delamination,Component overheating risk,7,4,7,196,operation,COTS,literature
+55,Thermal,Heater,Heater circuit open failure,Battery temperature drops below safe limit,8,4,5,160,operation,COTS,literature
+56,Thermal,Heater,Heater stuck on,Battery overheating and accelerated degradation,8,3,5,120,operation,COTS,literature
+57,Thermal,Thermal Design,Eclipse thermal gradient exceeds margin,Thermal stress on solder joints and components,6,7,6,252,operation,COTS,literature
+58,Thermal,Thermal Design,Hot case temperature exceedance,Processor throttling or shutdown,7,5,5,175,operation,COTS,literature
+59,EPS,Solar Panel,Electrostatic discharge damage,Cell string short circuit,8,4,8,256,operation,COTS,literature
+60,COM,Transceiver,Power amplifier burnout,Complete loss of downlink capability,9,4,7,252,operation,COTS,literature
+61,ADCS,Magnetorquer,Driver IC failure from radiation,Loss of actuation capability,8,4,7,224,operation,COTS,literature
+62,OBC,RTC,Real-time clock drift or failure,Incorrect timestamping of all data,4,5,4,80,operation,COTS,literature
+63,OBC,Power Supply,OBC voltage regulator failure,Complete OBC shutdown,10,3,5,150,operation,COTS,literature
+64,Structure,Deployment Mechanism,Thermal knife wire break before activation,Deployment failure,10,4,5,200,launch,COTS,literature
+65,Thermal,Thermal Sensor,Thermistor calibration drift,Incorrect thermal control decisions,5,5,5,125,operation,COTS,literature
+66,EPS,Battery,Catastrophic swelling in vacuum,Structural damage and total mission loss,10,6,9,540,operation,COTS,literature
+67,EPS,Solar Panel,Complete array failure from micrometeorite,Total power generation loss,10,5,9,450,operation,COTS,literature
+68,COM,Antenna,Both redundant antennas fail to deploy,Permanent total communication blackout,10,7,8,560,launch,COTS,AESP14
+69,COM,Transceiver,PA and LNA simultaneous failure from ESD,Complete loss of RF chain,10,5,9,450,operation,COTS,literature
+70,ADCS,Control Algorithm,Divergent control loop causes spin-up,Unrecoverable tumble and mission loss,10,5,8,400,operation,COTS,literature
+71,OBC,Microcontroller,Total dose radiation exceeds MCU limit,Permanent OBC failure,10,6,8,480,operation,COTS,literature
+72,Structure,Deployment Mechanism,P-POD ejection failure,Satellite never deployed,10,4,9,360,launch,COTS,literature
+73,EPS,Power Bus,Common-mode failure in unregulated bus,All subsystems lose power simultaneously,10,5,8,400,operation,COTS,literature
+74,Structure,Primary Structure,Buckling under launch loads,Catastrophic structural collapse,10,3,7,210,launch,space-grade,literature
+75,ADCS,Reaction Wheel,Wheel seizure from contamination,Total loss of fine pointing,9,4,7,252,operation,space-grade,literature
+76,OBC,Microcontroller,Radiation-hardened MCU firmware corruption,Safe mode entry with no recovery path,9,3,7,189,operation,space-grade,literature
+77,Thermal,Heat Pipe,Heat pipe dry-out in microgravity,Critical component overheating,8,4,8,256,operation,space-grade,literature
+78,COM,Transceiver,Space-grade PA infant mortality,Early mission communication loss,9,3,6,162,operation,space-grade,literature
+79,EPS,Battery,Space-grade cell unexpected capacity loss,Reduced operational duty cycle,7,4,5,140,operation,space-grade,literature
+80,ADCS,Star Tracker,Stray light saturation,Temporary loss of precision pointing,7,5,7,245,operation,space-grade,literature

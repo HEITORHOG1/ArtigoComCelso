@@ -1,0 +1,38 @@
+{
+  "ADCS": {
+    "dominant_factor": "Severity",
+    "mean_shap_S": 36.54,
+    "mean_shap_O": 30.73,
+    "mean_shap_D": 22.33
+  },
+  "COM": {
+    "dominant_factor": "Detection",
+    "mean_shap_S": 34.11,
+    "mean_shap_O": 45.09,
+    "mean_shap_D": 52.19
+  },
+  "EPS": {
+    "dominant_factor": "Detection",
+    "mean_shap_S": 32.75,
+    "mean_shap_O": 35.01,
+    "mean_shap_D": 59.6
+  },
+  "OBC": {
+    "dominant_factor": "Occurrence",
+    "mean_shap_S": 36.1,
+    "mean_shap_O": 47.19,
+    "mean_shap_D": 41.99
+  },
+  "Structure": {
+    "dominant_factor": "Detection",
+    "mean_shap_S": 30.53,
+    "mean_shap_O": 38.25,
+    "mean_shap_D": 67.27
+  },
+  "Thermal": {
+    "dominant_factor": "Occurrence",
+    "mean_shap_S": 32.88,
+    "mean_shap_O": 35.91,
+    "mean_shap_D": 33.66
+  }
+}

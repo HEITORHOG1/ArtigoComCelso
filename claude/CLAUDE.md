@@ -8,7 +8,12 @@ This is an **IEEE Access article** written in Markdown (outline phase), to be co
 
 **Title:** Automated Risk Priority Number Estimation for CubeSat FMEA Using XGBoost and SHAP Explainability
 
-**Authors:** Heitor Oliveira Goncalves, Celso (co-author)
+**Authors:**
+1. Heitor Oliveira Goncalves (ORCID: 0000-0002-5866-2213) — heitorhog@gmail.com (corresponding)
+2. Celso Pereira — cpereira.eng@gmail.com
+3. Jose Cristiano Pereira — josecristiano.pereira@ucp.br
+
+**Affiliation (all):** Center for Engineering and Computing, Catholic University of Petropolis, Petropolis, RJ, Brazil
 
 **Topic:** A framework combining XGBoost, SHAP explainability, and hierarchical clustering to automate and calibrate RPN estimation in CubeSat FMEA analyses. Trained on 63 failure modes from Brazilian nanosatellites (AESP-14, FloripaSat) plus data from 18 literature studies.
 

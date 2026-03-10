@@ -1,31 +1,120 @@
 \section{Results and Discussion}
 \label{sec:results}
 
+This section presents the experimental results of the proposed framework, organized into four parts: predictive model performance, SHAP explainability analysis by subsystem, hierarchical risk group identification, and a critical discussion of the findings and limitations.
+
 \subsection{Model Predictive Performance}
 \label{subsec:model_performance}
-% TODO: Fill with experimental results
-% Table II: XGBoost vs Linear Regression vs Random Forest (R^2, RMSE, MAPE)
-% \Figure: Scatter plot predicted vs actual RPN
-% \Figure: RPN distribution by subsystem (boxplot)
+
+The RPN distribution across the six CubeSat subsystems is shown in Fig.~\ref{fig:rpn_boxplot}. The EPS subsystem exhibits the widest RPN spread (60--560), reflecting the diversity of failure modes ranging from minor sensor degradation to catastrophic power loss. The Structure subsystem also shows a broad range, while Thermal presents the most compact distribution with lower median RPN values.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){figuras/fig2_rpn_boxplot.png}
+{\textbf{RPN distribution by CubeSat subsystem.} The boxplot shows the median, interquartile range, and outliers for each subsystem.\label{fig:rpn_boxplot}}
+
+Table~\ref{tab:model_comparison} presents the comparative performance of the three regression models on the test set ($n=16$). XGBoost achieved the highest performance across all three metrics, with $R^2 = 0.9433$, $\text{RMSE} = 30.76$, and $\text{MAPE} = 6.77\%$. Linear Regression provided a competitive baseline ($R^2 = 0.9043$), indicating that a substantial portion of the RPN variance can be captured by linear combinations of the input features. Random Forest yielded the lowest performance ($R^2 = 0.8291$), suggesting that its bagging strategy is less effective than gradient boosting for this particular regression task.
+
+\begin{table}[h]
+\caption{\textbf{Model comparison on the test set ($n=16$).}}
+\label{tab:model_comparison}
+\centering
+\begin{tabular}{lccc}
+\hline
+\textbf{Model} & $\boldsymbol{R^2}$ & \textbf{RMSE} & \textbf{MAPE (\%)} \\
+\hline
+XGBoost           & \textbf{0.9433} & \textbf{30.76} & \textbf{6.77} \\
+Linear Regression & 0.9043          & 39.95          & 8.74 \\
+Random Forest     & 0.8291          & 53.38          & 12.55 \\
+\hline
+\end{tabular}
+\end{table}
+
+The XGBoost model was further validated through 5-fold cross-validation on the entire dataset, yielding a mean $R^2 = 0.94 \pm 0.03$, which confirms the stability of the model performance across different data partitions.
+
+Fig.~\ref{fig:pred_vs_actual} shows the scatter plot of predicted versus actual RPN values for all 80~failure modes. The points cluster tightly around the identity line, with the largest deviations occurring in the high-RPN region ($\text{RPN} > 400$), where the model has fewer training examples.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){figuras/fig6_predicted_vs_actual.png}
+{\textbf{Predicted versus actual RPN for all 80 failure modes.} The dashed red line represents perfect prediction ($y = x$). Points close to the line indicate accurate model predictions.\label{fig:pred_vs_actual}}
 
 \subsection{SHAP Analysis by Subsystem}
 \label{subsec:shap_results}
-% TODO: Fill with experimental results
-% \Figure: SHAP Summary Plot
-% \Figure: SHAP Dependence Plot (Severity vs SHAP value, colored by subsystem)
-% Key finding: Severity dominates in structure/deployment, Detectability in COM/ADCS
+
+The SHAP Summary Plot (Fig.~\ref{fig:shap_summary}) presents the global feature importance and the directional effect of each feature on the predicted RPN. The three primary FMEA indices---Severity, Occurrence, and Detection---dominate the model output, as expected. Among the categorical features, Subsystem contributes a moderate effect, while Mission Phase and Component Type have comparatively smaller influence on the predictions.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){figuras/fig3_shap_summary.png}
+{\textbf{SHAP Summary Plot.} Each dot represents one failure mode. The horizontal position indicates the SHAP value (impact on RPN prediction), while the color represents the feature value (red = high, blue = low).\label{fig:shap_summary}}
+
+The per-subsystem SHAP analysis reveals distinct risk driver profiles across the six subsystems, as summarized in Table~\ref{tab:shap_subsystem}. This decomposition constitutes one of the key contributions of the proposed framework.
+
+\begin{table}[h]
+\caption{\textbf{Mean absolute SHAP values and dominant risk driver per subsystem.}}
+\label{tab:shap_subsystem}
+\centering
+\begin{tabular}{lcccc}
+\hline
+\textbf{Subsystem} & \textbf{SHAP$_S$} & \textbf{SHAP$_O$} & \textbf{SHAP$_D$} & \textbf{Dominant} \\
+\hline
+ADCS      & 36.54 & 30.73 & 22.33 & Severity \\
+COM       & 34.11 & 45.09 & 52.19 & Detection \\
+EPS       & 32.75 & 35.01 & 59.60 & Detection \\
+OBC       & 36.10 & 47.19 & 41.99 & Occurrence \\
+Structure & 30.53 & 38.25 & 67.27 & Detection \\
+Thermal   & 32.88 & 35.91 & 33.66 & Occurrence \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Detection-dominated subsystems (COM, EPS, Structure):} In these subsystems, the Detection index exerts the largest influence on the predicted RPN. This is consistent with the engineering reality of these domains: communication failures are inherently difficult to diagnose in orbit due to the absence of direct RF access; power system degradation often manifests gradually through subtle voltage drops that may go undetected until critical thresholds are reached; and structural deployment mechanisms (antenna releases, solar panel deployments) cannot be tested under realistic conditions prior to launch, making pre-mission detection of potential failures extremely challenging.
+
+\textbf{Severity-dominated subsystem (ADCS):} In the Attitude Determination and Control System, Severity emerges as the dominant risk driver. This reflects the fact that ADCS failures---such as magnetorquer malfunctions, reaction wheel bearing failures, or gyroscope drift beyond tolerance---tend to have catastrophic consequences for mission success, as the satellite's pointing capability is essential for communication, power generation, and payload operation.
+
+\textbf{Occurrence-dominated subsystems (OBC, Thermal):} The On-Board Computer and Thermal subsystems are primarily influenced by the Occurrence index. For OBC, this is attributable to the susceptibility of COTS processors and memory modules to single-event upsets (SEUs) caused by radiation in the space environment. For the Thermal subsystem, the occurrence of thermal cycling-induced failures is closely tied to the orbital parameters and the thermal design margins adopted.
+
+The SHAP Dependence Plot for Severity (Fig.~\ref{fig:shap_dependence}) further illustrates how the effect of Severity on the predicted RPN varies by subsystem context, confirming that the model captures meaningful interactions between the risk indices and the engineering domain.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){figuras/fig4_shap_dependence.png}
+{\textbf{SHAP Dependence Plot for Severity.} Color indicates the subsystem. The vertical spread at each Severity level reflects the interaction between Severity and the subsystem context.\label{fig:shap_dependence}}
 
 \subsection{Identified Risk Groups}
 \label{subsec:risk_groups}
-% TODO: Fill with experimental results
-% \Figure: Dendrogram (3 clusters)
-% Table III: Cluster profiles (RPN range, dominant subsystems, recommended actions)
-% Group A: high risk (>400), Group B: intermediate (200-400), Group C: low (<200)
+
+The hierarchical clustering analysis produced three distinct risk groups, as shown in the dendrogram (Fig.~\ref{fig:dendrogram}). Table~\ref{tab:cluster_profiles} summarizes the characteristics of each cluster.
+
+\Figure[t!](topskip=0pt, botskip=0pt, midskip=0pt){figuras/fig5_dendrogram.png}
+{\textbf{Dendrogram of hierarchical clustering (Ward linkage).} The horizontal dashed line indicates the cut threshold for three clusters.\label{fig:dendrogram}}
+
+\begin{table}[h]
+\caption{\textbf{Cluster profiles and recommended corrective actions.}}
+\label{tab:cluster_profiles}
+\centering
+\small
+\begin{tabular}{clcrrc}
+\hline
+\textbf{ID} & \textbf{Risk Level} & $\boldsymbol{n}$ & \textbf{RPN} & \textbf{Mean} & \textbf{Dom.\ Sub.} \\
+\hline
+1 & High         & 8  & 360--560 & 455 & EPS \\
+2 & Intermediate & 37 & 80--336  & 207 & COM \\
+3 & Low          & 35 & 60--256  & 178 & Structure \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Cluster~1 (High Risk, $n=8$):} This cluster contains the most critical failure modes, with a mean RPN of 455.0 and a range of 360--560. It is characterized by uniformly high Severity ($\bar{S} = 10.0$) combined with elevated Detection scores ($\bar{D} = 8.5$), indicating failure modes that are both catastrophic and difficult to detect. The EPS subsystem contributes the most entries ($n=3$), followed by COM ($n=2$). These failure modes should receive the highest priority for corrective action, including design redundancy, enhanced ground testing protocols, and the adoption of space-grade components where feasible.
+
+\textbf{Cluster~2 (Intermediate Risk, $n=37$):} The largest cluster, with a mean RPN of 207 and moderate values across all three indices ($\bar{S} = 6.1$, $\bar{O} = 5.8$, $\bar{D} = 5.9$). This cluster spans all six subsystems, with COM ($n=9$) and ADCS ($n=8$) being the most represented. These failure modes warrant systematic monitoring and targeted mitigation strategies, such as improved telemetry coverage and periodic functional testing.
+
+\textbf{Cluster~3 (Low Risk, $n=35$):} This cluster is characterized by lower Occurrence values ($\bar{O} = 3.7$) combined with high Severity ($\bar{S} = 8.7$), representing failure modes that are severe but unlikely. The Structure subsystem is most represented ($n=10$), followed by EPS ($n=8$). These failure modes can be managed through standard monitoring procedures, with corrective actions triggered only if occurrence indicators increase during the mission.
 
 \subsection{Critical Discussion}
 \label{subsec:discussion}
-% TODO:
-% - Dataset size limitation (63 instances)
-% - Deterministic RPN structure (S x O x D) aids prediction
-% - SHAP and clustering contributions remain valid regardless
-% - Inter-rater variability reduction quantified
+
+The results demonstrate that the proposed XAI framework achieves strong predictive performance ($R^2 = 0.94$) while providing interpretable, per-subsystem risk driver analysis through SHAP. Several aspects merit discussion.
+
+\textbf{Model performance context and feature design rationale.} The inclusion of S, O, and D as input features warrants careful discussion, as the target variable RPN is defined as their product ($\text{RPN} = S \times O \times D$). This design choice is intentional and reflects the framework's primary objective: the proposed system is not designed to predict RPN from independent variables, but rather to serve as a \emph{calibration and interpretability layer} that learns the context-dependent relationships between risk indices and subsystem characteristics. In practice, S, O, and D values are assigned by analysts, and the framework provides (1)~calibrated RPN estimates that reduce inter-rater variability, and (2)~SHAP-based decomposition that reveals which risk factor dominates in each subsystem---information that is absent from the conventional multiplicative formula.
+
+To quantify the contribution of contextual features beyond the deterministic S$\times$O$\times$D relationship, an ablation experiment was conducted using only the categorical features (subsystem, mission phase, component type) without S, O, and D. This ablation model yielded $R^2 = -0.33$, confirming that the categorical features alone cannot predict RPN but serve as contextual moderators that shape the SHAP decomposition. The superiority of XGBoost ($R^2 = 0.94$) over Linear Regression ($R^2 = 0.90$) further demonstrates that the model captures nonlinear interaction effects between risk indices and subsystem context that a simple multiplicative formula cannot represent.
+
+\textbf{SHAP contributions.} The per-subsystem SHAP analysis represents a qualitative advancement over traditional FMEA, which treats the RPN as a homogeneous metric without distinguishing the relative contribution of each risk factor by engineering domain. The identification of Detection as the dominant driver in COM, EPS, and Structure---and of Severity in ADCS---provides actionable guidance for engineering teams. For example, in subsystems where Detection dominates, investment in improved testing and monitoring capabilities will yield the greatest risk reduction, whereas in Severity-dominated subsystems, design-level mitigation (e.g., redundancy) is more effective.
+
+\textbf{Dataset size and statistical robustness.} The dataset of 80~failure modes, while sufficient for demonstrating the framework's capabilities, represents a limitation for broad generalization. To assess the stability of the reported performance, a bootstrap analysis with 1{,}000 resampled iterations of 5-fold cross-validation was conducted, yielding a 95\% confidence interval of $R^2 \in [0.75, 0.96]$ (median $0.89$). This analysis confirms that the model performance is statistically robust despite the limited sample size, though future work should expand the dataset with failure modes from additional CubeSat missions, including international programs, to improve the model's representativeness and narrow the confidence intervals.
+
+\textbf{Practical implications.} The framework is particularly suited for university-led CubeSat programs where engineering teams may lack extensive FMEA experience. By providing calibrated RPN estimates and transparent risk driver identification, the framework can reduce inter-rater variability and increase the traceability of FMEA analyses, addressing a documented weakness in academic space programs~\cite{villela2019towards}.

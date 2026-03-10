@@ -1,0 +1,61 @@
+[
+  {
+    "cluster": 1,
+    "risk_level": "High",
+    "count": 8,
+    "RPN_mean": 455.0,
+    "RPN_min": 360,
+    "RPN_max": 560,
+    "S_mean": 10.0,
+    "O_mean": 5.4,
+    "D_mean": 8.5,
+    "dominant_subsystem": "EPS",
+    "subsystems": {
+      "EPS": 3,
+      "COM": 2,
+      "ADCS": 1,
+      "OBC": 1,
+      "Structure": 1
+    }
+  },
+  {
+    "cluster": 2,
+    "risk_level": "Intermediate",
+    "count": 37,
+    "RPN_mean": 206.6,
+    "RPN_min": 80,
+    "RPN_max": 336,
+    "S_mean": 6.1,
+    "O_mean": 5.8,
+    "D_mean": 5.9,
+    "dominant_subsystem": "COM",
+    "subsystems": {
+      "COM": 9,
+      "ADCS": 8,
+      "OBC": 7,
+      "Thermal": 6,
+      "EPS": 5,
+      "Structure": 2
+    }
+  },
+  {
+    "cluster": 3,
+    "risk_level": "Low",
+    "count": 35,
+    "RPN_mean": 177.8,
+    "RPN_min": 60,
+    "RPN_max": 256,
+    "S_mean": 8.7,
+    "O_mean": 3.7,
+    "D_mean": 5.6,
+    "dominant_subsystem": "Structure",
+    "subsystems": {
+      "Structure": 10,
+      "EPS": 8,
+      "OBC": 5,
+      "ADCS": 5,
+      "Thermal": 4,
+      "COM": 3
+    }
+  }
+]

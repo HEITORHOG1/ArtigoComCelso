@@ -1,9 +1,19 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-% TODO: Write Conclusion
-% - XAI framework validated (R^2 > 0.98, MAPE < 3\%)
-% - SHAP: Severity dominates in structure/deployment, Detectability in COM
-% - 3 actionable risk groups for engineering prioritization
-% - Limitation: dataset size (63 instances), Brazilian context only
-% - Future work: OPSSAT-AD transfer learning, LSTM/Transformers, international missions
+This work presented an Explainable Artificial Intelligence framework based on XGBoost and SHAP for automating the estimation of Risk Priority Numbers in Failure Mode and Effects Analysis of CubeSat missions. The framework was trained and validated on a structured dataset of 80~failure modes compiled from CubeSat subsystem analyses and the specialized literature, covering six subsystems across the EPS, COM, ADCS, OBC, Structure, and Thermal domains.
+
+The XGBoost model achieved a coefficient of determination of $R^2 = 0.94$ on the test set, with $\text{RMSE} = 30.76$ and $\text{MAPE} = 6.77\%$, outperforming both Linear Regression ($R^2 = 0.90$) and Random Forest ($R^2 = 0.83$) baselines. Beyond predictive accuracy, the SHAP analysis provided granular, per-subsystem interpretability: Detection was identified as the dominant risk driver in the COM, EPS, and Structure subsystems, Severity dominated in the ADCS subsystem, and Occurrence was most influential in the OBC and Thermal subsystems. This level of decomposition constitutes a qualitative advancement over conventional FMEA, which treats RPN as a homogeneous metric.
+
+The hierarchical clustering component classified the failure modes into three actionable risk groups---high ($n=8$, mean RPN = 455), intermediate ($n=37$, mean RPN = 207), and low ($n=35$, mean RPN = 178)---providing structured support for corrective action prioritization and engineering resource allocation.
+
+As a primary limitation, the dataset of 80~instances, while sufficient for proof-of-concept validation, constrains the generalizability of the findings. Future work should expand the dataset with failure modes from additional CubeSat missions, including international programs, to improve model robustness.
+
+Three directions for future research are identified:
+\begin{enumerate}
+\item \textbf{Dataset expansion:} Integration of failure data from international CubeSat programs and public mission databases to increase statistical representativeness.
+\item \textbf{Transfer learning:} Leveraging the OPS-SAT Anomaly Detection benchmark~\cite{ruszczak2025opssat} for extending the framework to operational telemetry-based risk assessment.
+\item \textbf{Real-time monitoring:} Investigation of temporal models (LSTM, Transformers) for in-orbit risk prediction based on streaming telemetry data, building upon the static FMEA framework established in this work.
+\end{enumerate}
+
+The complete dataset and source code are made available to support reproducibility and facilitate adoption by CubeSat development teams worldwide.
